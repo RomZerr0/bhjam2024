@@ -1,0 +1,98 @@
+[gd_scene load_steps=14 format=3 uid="uid://b8n0w7lswwsc5"]
+
+[ext_resource type="Script" path="res://enemy.gd" id="1_fpodk"]
+[ext_resource type="Texture2D" uid="uid://b1cmwvqtlsjdm" path="res://sprites/stolen_fairy.png" id="2_c2yhi"]
+[ext_resource type="PackedScene" uid="uid://v32ttyvx5vww" path="res://danmaku.tscn" id="2_gmoc0"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gk6ph"]
+atlas = ExtResource("2_c2yhi")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_i6yte"]
+atlas = ExtResource("2_c2yhi")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ba0h7"]
+atlas = ExtResource("2_c2yhi")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gqf6q"]
+atlas = ExtResource("2_c2yhi")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vrffh"]
+atlas = ExtResource("2_c2yhi")
+region = Rect2(128, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8vm1b"]
+atlas = ExtResource("2_c2yhi")
+region = Rect2(160, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_y5umg"]
+atlas = ExtResource("2_c2yhi")
+region = Rect2(192, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qwp3x"]
+atlas = ExtResource("2_c2yhi")
+region = Rect2(224, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_fua5r"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gk6ph")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_i6yte")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ba0h7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gqf6q")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vrffh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8vm1b")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_y5umg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qwp3x")
+}],
+"loop": true,
+"name": &"default",
+"speed": 20.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_kh8fj"]
+radius = 9.05539
+
+[node name="enemy" type="RigidBody2D" groups=["enemy"]]
+collision_mask = 0
+gravity_scale = 0.0
+script = ExtResource("1_fpodk")
+danmaku_scene = ExtResource("2_gmoc0")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_fua5r")
+frame_progress = 0.949353
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
+scale = Vector2(0.8, 1.2)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_kh8fj")
+
+[node name="AttackTimer" type="Timer" parent="."]
+
+[node name="Delay" type="Timer" parent="."]
+wait_time = 2.0
+one_shot = true
+
+[connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="_on_visible_on_screen_notifier_2d_screen_exited"]
+[connection signal="timeout" from="AttackTimer" to="." method="_on_AttackTimer_expire"]
+[connection signal="timeout" from="Delay" to="." method="_on_delay_expire"]
