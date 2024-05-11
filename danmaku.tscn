@@ -5,8 +5,8 @@
 [ext_resource type="Texture2D" uid="uid://7ra7357jmdbn" path="res://sprites/stolen_bullet.png" id="1_j2uam"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_0blps"]
-radius = 6.0
-height = 12.0
+radius = 4.0
+height = 8.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_casm6"]
 shader = ExtResource("1_7f2cc")

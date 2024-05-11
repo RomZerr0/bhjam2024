@@ -277,7 +277,7 @@ shape = SubResource("CircleShape2D_dvb7b")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_utf7y")
 animation = &"float"
-frame_progress = 0.032525
+frame_progress = 0.82774
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = SubResource("CompressedTexture2D_dwj84")

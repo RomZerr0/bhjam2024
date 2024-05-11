@@ -37,6 +37,11 @@ region = Rect2(224, 0, 32, 32)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_fua5r"]
 animations = [{
+"frames": [],
+"loop": true,
+"name": &"cirno",
+"speed": 10.0
+}, {
 "frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_gk6ph")
@@ -83,7 +88,7 @@ script = ExtResource("1_fpodk")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_fua5r")
-frame_progress = 0.535855
+frame_progress = 0.213569
 
 [node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
 scale = Vector2(0.8, 1.2)
@@ -103,6 +108,12 @@ collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 shape = SubResource("CircleShape2D_imtf7")
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+path_desired_distance = 0.1
+target_desired_distance = 0.1
+path_max_distance = 3000.0
+debug_enabled = true
 
 [connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="_on_visible_on_screen_notifier_2d_screen_exited"]
 [connection signal="timeout" from="AttackTimer" to="." method="_on_AttackTimer_expire"]

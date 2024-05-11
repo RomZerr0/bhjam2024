@@ -34,5 +34,8 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	$Lives.text = str(heart_symbol).repeat(get_node("../Player").lives)
+	if get_node("../Player").lives > 0:
+		$Lives.text = str(heart_symbol).repeat(get_node("../Player").lives)
+	else:
+		$Lives.text = ""
 	$Playerpos.text = str(get_node("../Player").get_position())

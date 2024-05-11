@@ -14,7 +14,7 @@ position = Vector2(8, 8)
 position = Vector2(320, 576)
 
 [node name="EnemyTimer" type="Timer" parent="."]
-wait_time = 2.0
+wait_time = 30.0
 
 [node name="Player" parent="." instance=ExtResource("3_3nbo7")]
 

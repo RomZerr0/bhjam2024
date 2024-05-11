@@ -5,6 +5,8 @@ var max = 780 # adjust this in distance
 var dmg = 0
 var pow = 0
 var alive = false
+var order = 0
+var delayed_linear_velocity = 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
