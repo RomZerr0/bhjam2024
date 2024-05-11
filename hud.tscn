@@ -21,16 +21,14 @@ func _process(delta):
 script = ExtResource("1_ocxcf")
 
 [node name="Message" type="Label" parent="."]
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -216.5
-offset_right = 216.5
+anchors_preset = 10
+anchor_right = 1.0
 offset_bottom = 82.0
 grow_horizontal = 2
 theme_override_fonts/font = ExtResource("2_wnxi6")
 theme_override_font_sizes/font_size = 64
 text = "SAMPLE TEXT"
+horizontal_alignment = 1
 
 [node name="StartButton" type="Button" parent="."]
 anchors_preset = 8
@@ -52,6 +50,21 @@ script = SubResource("GDScript_ke1p2")
 [node name="MessageTimer" type="Timer" parent="."]
 wait_time = 2.0
 autostart = true
+
+[node name="Playerpos" type="Label" parent="."]
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="Lives" type="Label" parent="."]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -66.0
+offset_top = 11.0
+offset_bottom = 34.0
+grow_horizontal = 0
+theme_override_fonts/font = ExtResource("2_wnxi6")
+text = "❤️❤️❤️"
 
 [connection signal="pressed" from="StartButton" to="." method="_on_start_button_pressed"]
 [connection signal="timeout" from="MessageTimer" to="." method="_on_message_timer_timeout"]

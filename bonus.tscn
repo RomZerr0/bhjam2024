@@ -1,15 +1,15 @@
-[gd_scene load_steps=7 format=3 uid="uid://v32ttyvx5vww"]
+[gd_scene load_steps=7 format=3 uid="uid://ceupert37urqg"]
 
-[ext_resource type="Script" path="res://danmaku.gd" id="1_6p6bt"]
-[ext_resource type="Shader" path="res://danmaku.gdshader" id="1_7f2cc"]
-[ext_resource type="Texture2D" uid="uid://7ra7357jmdbn" path="res://sprites/stolen_bullet.png" id="1_j2uam"]
+[ext_resource type="Script" path="res://danmaku.gd" id="1_dei6b"]
+[ext_resource type="Shader" path="res://danmaku.gdshader" id="2_ndogg"]
+[ext_resource type="Texture2D" uid="uid://cojky83vt3wr5" path="res://sprites/hitbox.png" id="3_8vse6"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_0blps"]
 radius = 6.0
 height = 12.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_casm6"]
-shader = ExtResource("1_7f2cc")
+shader = ExtResource("2_ndogg")
 shader_parameter/line_thickness = 0.01
 shader_parameter/sin_frequency = 0.1
 shader_parameter/sin_offset = 0.0
@@ -17,10 +17,12 @@ shader_parameter/light_offset = 0.5
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_7cjva"]
 
-[node name="RigidBody2D" type="RigidBody2D" groups=["bullets"]]
+[node name="Bonus" type="RigidBody2D" groups=["bonus"]]
 collision_mask = 0
-gravity_scale = 0.0
-script = ExtResource("1_6p6bt")
+mass = 0.19
+gravity_scale = 0.1
+inertia = 1.22
+script = ExtResource("1_dei6b")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CapsuleShape2D_0blps")
@@ -28,7 +30,7 @@ shape = SubResource("CapsuleShape2D_0blps")
 [node name="Sprite2D" type="Sprite2D" parent="."]
 material = SubResource("ShaderMaterial_casm6")
 rotation = 1.5708
-texture = ExtResource("1_j2uam")
+texture = ExtResource("3_8vse6")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_7cjva")

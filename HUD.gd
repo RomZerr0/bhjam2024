@@ -1,5 +1,6 @@
 extends CanvasLayer
 signal start_game
+var heart_symbol = "❤️"
 
 func _on_start_button_pressed():
 	$StartButton.hide()
@@ -27,9 +28,11 @@ func show_game_over():
 	
 	
 func _ready():
-	pass # Replace with function body.
+	pass
+	
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	pass
+	$Lives.text = str(heart_symbol).repeat(get_node("../Player").lives)
+	$Playerpos.text = str(get_node("../Player").get_position())

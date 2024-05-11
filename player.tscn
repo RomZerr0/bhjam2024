@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://c533d2rpx7sf5" path="res://sprites/stolen_reimu.png" id="2_qtbhw"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_dvb7b"]
-radius = 5.0
+radius = 4.0
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_sr1ml"]
 atlas = ExtResource("2_qtbhw")
@@ -276,12 +276,10 @@ shape = SubResource("CircleShape2D_dvb7b")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_utf7y")
-animation = &"right"
-frame = 8
-frame_progress = 1.0
+animation = &"float"
+frame_progress = 0.032525
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-visible = false
 texture = SubResource("CompressedTexture2D_dwj84")
 
 [connection signal="body_entered" from="." to="." method="_on_collision"]

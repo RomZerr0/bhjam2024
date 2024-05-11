@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cojky83vt3wr5"
-path="res://.godot/imported/hitbox.png-af13967e02fb15528d70b6a699b587ea.ctex"
+uid="uid://dw6qh7f6k1cs"
+path="res://.godot/imported/bullet_round.png-de8f8820f344df841eeae1ed30faf8f5.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://hitbox.png"
-dest_files=["res://.godot/imported/hitbox.png-af13967e02fb15528d70b6a699b587ea.ctex"]
+source_file="res://sprites/bullet_round.png"
+dest_files=["res://.godot/imported/bullet_round.png-de8f8820f344df841eeae1ed30faf8f5.ctex"]
 
 [params]
 

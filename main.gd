@@ -1,39 +1,35 @@
 extends Node2D
 #@export var enemy_scene: PackedScene
 var rng = RandomNumberGenerator.new()
+var danmaku_type: PackedScene
 
 func game_over():
-	$enemy.hide()
-	get_tree().call_group("enemy", "queue_free")
+	await get_tree().create_timer(0.2).timeout
 	$HUD.show_game_over()
 	$EnemyTimer.stop()
-
-func game_start():
+	await get_tree().create_timer(2.0).timeout
+	
+func spawnenemy(pos, type = "default", danmaku = "res://danmaku_round.tscn"):
+	danmaku_type = load(danmaku)
 	var enemy_scene = load("res://enemy.tscn")
 	var enemy_inst = enemy_scene.instantiate()
 	add_child(enemy_inst)
-	enemy_inst.spawn($enemypos.position)
-	$Player.start($StartPos.position)
-	$StartDelay.start()
-	
-func _on_StartDelay_timeout():
-	$EnemyTimer.start()
-# Called when the node enters the scene tree for the first time.
-func _on_EnemyTimer_timeout():
-	#var mob = enemy_scene.instantiate()
-	#var mob_spawn_pos = $EnemyPath/Spawner
-	#mob_spawn_pos.progress_ratio = rng.randf()
-	#var direction = mob_spawn_pos.rotation + PI / 2
-	#mob.position = mob_spawn_pos.position
-	#var velocity = Vector2(rng.randf_range(50.0, 100.0), 0.0)
-	#mob.linear_velocity = velocity.rotated(direction)
-	#add_child(mob)
-	pass
-	#dirty hack
-	#var screen_size = get_viewport_rect().size
-	
-	
+	enemy_inst.spawn(pos, type, danmaku_type)
 
+func game_start():
+	get_tree().call_group("enemy", "queue_free")
+	get_tree().call_group("bullets", "queue_free")
+	get_tree().call_group("bonus", "queue_free")
+	$EnemyTimer.start()
+	$Player.start($StartPos.position)
+	$Player.lives = 3
+	$Player.pow = 1
+	
+func _on_EnemyTimer_timeout():
+	var enemypos = $enemypos.position
+	enemypos.x = enemypos.x + rng.randi_range(0,640)
+	spawnenemy(enemypos)
+	
 func _ready():
 	rng.seed = hash("rng")
 	#game_start()
