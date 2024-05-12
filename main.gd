@@ -3,6 +3,7 @@ extends Node2D
 var rng = RandomNumberGenerator.new()
 var danmaku_type: PackedScene
 var screen_size 
+var shootsnd = preload("res://sfx/shoot.wav")
 
 func game_over():
 	await get_tree().create_timer(0.2).timeout

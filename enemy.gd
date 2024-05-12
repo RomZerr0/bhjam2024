@@ -5,8 +5,10 @@ var velocity = Vector2.ZERO
 var att_count = 0
 var alive = true
 var rng
+var shootsnd
 
 func _ready():
+	shootsnd = preload("res://sfx/shoot.wav")
 	rng = get_node("..").rng
 	$AnimatedSprite2D.play("default")
 	$Delay.start()
@@ -48,7 +50,7 @@ func drop_bonus():
 	call_deferred("add_child", bonus)
 		
 		
-func pattern_gen(amount = 10, target = "player", type = "default", speed = 100, shape = "default", order = "default", spread = 0, scale = 2, offset = Vector2.ZERO, att_speed = 0.0, delay = 0.0, phase = 0):
+func pattern_gen(amount = 10, target = "player", type = "default", speed = 100, shape = "default", order = "default", spread = 0, scale = 2, offset = Vector2.ZERO, att_speed = 0.0, delay = 0.0, phase = 0, color = "rainbow"):
 	var danmaku_type
 	var target_angle
 	var aim: Vector2
@@ -167,16 +169,17 @@ func pattern_gen(amount = 10, target = "player", type = "default", speed = 100, 
 
 		danmaku.dmg = 1
 		danmaku.top_level = true
+		danmaku.color = color
 		array.append(danmaku)
 		
 	if phase <0:
 		array.reverse()
-	for i in array:
-		add_child(i)
-		childs.append(i)
+	for i in array.size():
+		add_child(array[i])
+		childs.append(array[i])
 		if att_speed != 0.0:
 			await get_tree().create_timer(att_speed).timeout
-			
+		
 	if order == "delayed":
 		for child in childs:
 			child._on_timer_timeout(delay)
@@ -215,39 +218,32 @@ func _on_AttackTimer_expire():
 		att_count += 1
 		
 		if att_count % 10 == 0:
-			pattern_gen(60,"none","default",100,"circle","staggered",180,12,Vector2.ZERO,0.08, 2, 0)
-			pattern_gen(60,"none","default",100,"circle","staggered",180,12,Vector2.ZERO,0.08, 2, 180)
-			#pattern_gen(20,"player","default",80,"rose4","delayed",360,15,Vector2.ZERO,0.01, 2, att_count / 2 * 14.4)
-			#pattern_gen(80,"self","default",80,"rose5","delayed",360,30,Vector2.ZERO,0.01, 2, 180)
-			#pattern_gen(40,"self","default",80,"delta","staggered",360,15,Vector2.ZERO,0.1, 1, att_count % 10 *60 + 120)
-			#pattern_gen(40,"self","default",80,"delta","staggered",360,15,Vector2.ZERO,0.1, 1, att_count % 10 *60 + 240)
-		if att_count % 4 == 0:
-			pattern_gen(2,"player","default",160,"circle","default",0,1,Vector2.ZERO,0, 1, 0)
-			pattern_gen(4,"player","default",150,"circle","default",5,1,Vector2.ZERO,0, 1, 0)
-			pattern_gen(6,"player","default",140,"circle","default",10,1,Vector2.ZERO,0, 1, 0)
-			pattern_gen(8,"player","default",130,"circle","default",15,1,Vector2.ZERO,0, 1, 0)
-			pattern_gen(10,"player","default",120,"circle","default",20,1,Vector2.ZERO,0, 1, 0)
-		if att_count % 2 == 0:
-			pattern_gen(28,"catch","round",200,"circle","default",10,3,Vector2.ZERO,0.0, 1, 0)
-		#if att_count % 10 == 0:
-			#pattern_gen(80,"self","round",100,"circle","staggered",360,10,Vector2.ZERO,0.05, 4, 0)
-			#pattern_gen(80,"self","round",100,"circle","staggered",360,10,Vector2.ZERO,0.05, 4, -90)
-			#pattern_gen(80,"self","round",100,"circle","staggered",360,10,Vector2.ZERO,0.05, 4, 180)
-			#pattern_gen(80,"self","round",100,"circle","staggered",360,10,Vector2.ZERO,0.05, 4, -270)
+			pattern_gen(60,"none","default",100,"circle","staggered",180,6,Vector2.ZERO,0.08, 2, 0, "red")
+			pattern_gen(60,"none","default",100,"circle","staggered",180,6,Vector2.ZERO,0.08, 2, 180, "red")
+
+		if att_count % 6 == 0:
+			pattern_gen(2,"player","default",160,"circle","default",0,1,Vector2.ZERO,0, 0.2, 0)
+			pattern_gen(4,"player","default",150,"circle","default",5,1,Vector2.ZERO,0, 0.2, 0)
+			pattern_gen(6,"player","default",140,"circle","default",10,1,Vector2.ZERO,0, 0.2, 0)
+			pattern_gen(4,"player","default",130,"circle","default",10,1,Vector2.ZERO,0, 0.2, 0)
+			pattern_gen(4,"player","default",120,"circle","default",10,1,Vector2.ZERO,0, 0.2, 0)
+			pattern_gen(2,"player","default",110,"circle","default",5,1,Vector2.ZERO,0, 0.2, 0)
+			pattern_gen(2,"player","default",100,"circle","default",5,1,Vector2.ZERO,0, 0.2, 0)
+			pattern_gen(2,"player","default",90,"circle","default",0,1,Vector2.ZERO,0, 0.2, 0)
+			pattern_gen(2,"player","default",80,"circle","default",0,1,Vector2.ZERO,0, 0.2, 0)
 		if att_count % 15 == 0:
-			pattern_gen(40,"self","round",60,"clover","delayed",360,8,Vector2.ZERO,0.1, 2, 0)
-			pattern_gen(40,"self","round",60,"clover","delayed",360,9,Vector2.ZERO,0.1, 2, 90)
+			pattern_gen(60,"self","round",80,"clover","delayed",0,5,Vector2.ZERO,0.05, 1.5, 180, "blue")
+			pattern_gen(60,"self","round",80,"clover","delayed",0,4,Vector2.ZERO,0.05, 1.6, 0, "blue")
+			pattern_gen(60,"self","round",80,"clover","delayed",0,3,Vector2.ZERO,0.05, 1.7, -180, "blue")
+			pattern_gen(60,"self","round",80,"clover","delayed",0,2,Vector2.ZERO,0.05, 1.8, -360, "blue")
 		#pattern_gen(amount, aim, type, speed, shape, order, spread, scale):
-		#var arrayone = pattern_gen(100,Vector2.ZERO,"round",100,"clover","default",0,2,Vector2.ZERO)
-		#var arrayone = pattern_gen(100,get_node('../Player').position,"round",100,"circle","default",45,2,Vector2.ZERO)
-		#var arraytwo = pattern_gen(100,Vector2.ZERO,"default",100,"circle","default",360,1)
-		#fire_array(arrayone,)
-		#fire_array(arraytwo,)
+
 		$NavigationAgent2D.target_position = Vector2(-32,-32)
 		
 func _process(delta):
-	var current_agent_position: Vector2 = global_position
-	var next_path_position: Vector2 = $NavigationAgent2D.get_next_path_position()
-	if next_path_position != null:
-		velocity = current_agent_position.direction_to(next_path_position) * speed
-		position += velocity * delta
+	pass
+	#var current_agent_position: Vector2 = global_position
+	#var next_path_position: Vector2 = $NavigationAgent2D.get_next_path_position()
+	#if next_path_position != null:
+		#velocity = current_agent_position.direction_to(next_path_position) * speed
+		#position += velocity * delta

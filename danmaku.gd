@@ -10,10 +10,12 @@ var delayed_linear_velocity = Vector2.ZERO
 var screen_size
 var lifetime = 0
 var timer = 0.0
+var color = "none"
 
 func _on_timer_timeout(t = timer):
 	await get_tree().create_timer(t).timeout
 	linear_velocity = delayed_linear_velocity
+	$AudioStreamPlayer.play()
 	lifetime = 0
 
 func spawn():
@@ -21,6 +23,7 @@ func spawn():
 	$AnimatedSprite2D.scale = Vector2(0, 0)
 	$AnimatedSprite2D.self_modulate = Color(1, 1, 1, 0)
 	$Sprite2D.self_modulate = Color(1, 1, 1, 0)
+	$AudioStreamPlayer.play()
 	for i in range(10):
 		$AnimatedSprite2D.self_modulate.a += 0.1
 		$AnimatedSprite2D.scale += Vector2(0.1, 0.1)
@@ -30,10 +33,22 @@ func spawn():
 	if timer != 0.0:
 		await get_tree().create_timer(timer).timeout
 		linear_velocity = delayed_linear_velocity
+		$AudioStreamPlayer.play()
 		lifetime = 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	$AudioStreamPlayer.stream = get_node("..").shootsnd
+	if color == "none":
+		$Sprite2D.material.set_shader_parameter("sin_offset", 0.0)
+	if color == "red":
+		$Sprite2D.material.set_shader_parameter("sin_offset", 90.0)
+		$Sprite2D.material.set_shader_parameter("sin_frequency", 0.5)
+	if color == "green":
+		$Sprite2D.material.set_shader_parameter("sin_offset", 180.0)
+	if color == "blue":
+		$Sprite2D.material.set_shader_parameter("sin_offset", 270.0)
+		$Sprite2D.material.set_shader_parameter("sin_frequency", 2.0)
 	lifetime = 0
 	screen_size = get_viewport_rect().size
 	start = position

@@ -145,7 +145,7 @@ script = ExtResource("1_fpodk")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_fua5r")
 animation = &"cirno"
-frame_progress = 0.909003
+frame_progress = 0.993078
 
 [node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
 scale = Vector2(0.8, 1.2)

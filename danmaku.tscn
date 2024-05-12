@@ -46,3 +46,6 @@ monitoring = false
 [node name="CollisionShape2D" type="CollisionShape2D" parent="grazearea"]
 rotation = 1.5708
 shape = SubResource("CapsuleShape2D_l3tyh")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+bus = &"bullets"

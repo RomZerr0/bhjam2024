@@ -42,3 +42,6 @@ monitoring = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="grazearea"]
 shape = SubResource("CircleShape2D_gbdrt")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+bus = &"bullets"
