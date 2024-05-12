@@ -1,7 +1,39 @@
-[gd_scene load_steps=14 format=3 uid="uid://b8n0w7lswwsc5"]
+[gd_scene load_steps=22 format=3 uid="uid://b8n0w7lswwsc5"]
 
 [ext_resource type="Script" path="res://enemy.gd" id="1_fpodk"]
 [ext_resource type="Texture2D" uid="uid://b1cmwvqtlsjdm" path="res://sprites/stolen_fairy.png" id="2_c2yhi"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vyhcj"]
+atlas = ExtResource("2_c2yhi")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3uyi7"]
+atlas = ExtResource("2_c2yhi")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_o3g6v"]
+atlas = ExtResource("2_c2yhi")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_flv2d"]
+atlas = ExtResource("2_c2yhi")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7bq55"]
+atlas = ExtResource("2_c2yhi")
+region = Rect2(128, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_i601r"]
+atlas = ExtResource("2_c2yhi")
+region = Rect2(160, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_so1h7"]
+atlas = ExtResource("2_c2yhi")
+region = Rect2(192, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_r7sgr"]
+atlas = ExtResource("2_c2yhi")
+region = Rect2(224, 0, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_gk6ph"]
 atlas = ExtResource("2_c2yhi")
@@ -37,10 +69,34 @@ region = Rect2(224, 0, 32, 32)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_fua5r"]
 animations = [{
-"frames": [],
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vyhcj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3uyi7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_o3g6v")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_flv2d")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7bq55")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_i601r")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_so1h7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_r7sgr")
+}],
 "loop": true,
 "name": &"cirno",
-"speed": 10.0
+"speed": 20.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -88,7 +144,8 @@ script = ExtResource("1_fpodk")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_fua5r")
-frame_progress = 0.213569
+animation = &"cirno"
+frame_progress = 0.909003
 
 [node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
 scale = Vector2(0.8, 1.2)

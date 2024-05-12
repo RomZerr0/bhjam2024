@@ -10,13 +10,12 @@ func game_over():
 	$EnemyTimer.stop()
 	await get_tree().create_timer(2.0).timeout
 	
-func spawnenemy(pos, type = "default", danmaku = "res://danmaku_round.tscn", nav = 25):
-	danmaku_type = load(danmaku)
+func spawnenemy(pos, type = "default", nav = 25):
 	var enemy_scene = load("res://enemy.tscn")
 	var enemy_inst = enemy_scene.instantiate()
 	enemy_inst.speed = nav
 	add_child(enemy_inst)
-	enemy_inst.spawn(pos, type, danmaku_type)
+	enemy_inst.spawn(pos, type)
 
 func game_start():
 	get_tree().call_group("enemy", "queue_free")
@@ -33,8 +32,9 @@ func game_start():
 	
 	
 func _on_EnemyTimer_timeout():
-	var enemypos = $enemypos.position
-	enemypos.x = enemypos.x + rng.randi_range(0,640)
+	pass
+	#var enemypos = $enemypos.position
+	#enemypos.x = enemypos.x + rng.randi_range(0,640)
 	#spawnenemy(enemypos)
 	
 func _ready():

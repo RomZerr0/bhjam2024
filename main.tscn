@@ -11,10 +11,10 @@ script = ExtResource("1_5fvj4")
 position = Vector2(8, 8)
 
 [node name="StartPos" type="Marker2D" parent="."]
-position = Vector2(320, 576)
+position = Vector2(640, 360)
 
 [node name="EnemyTimer" type="Timer" parent="."]
-wait_time = 30.0
+wait_time = 6.0
 
 [node name="Player" parent="." instance=ExtResource("3_3nbo7")]
 

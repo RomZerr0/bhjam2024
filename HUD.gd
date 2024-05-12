@@ -34,6 +34,11 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
+	var score = get_node("../Player").score
+	if score > 0:
+		$Score.text = str(score)
+	else:
+		$Score.text = ""
 	if get_node("../Player").lives > 0:
 		$Lives.text = str(heart_symbol).repeat(get_node("../Player").lives)
 	else:

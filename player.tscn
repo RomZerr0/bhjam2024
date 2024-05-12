@@ -1,7 +1,8 @@
-[gd_scene load_steps=39 format=3 uid="uid://bgxuror8btpnu"]
+[gd_scene load_steps=42 format=3 uid="uid://bgxuror8btpnu"]
 
 [ext_resource type="Script" path="res://Area2D.gd" id="1_7u1cn"]
 [ext_resource type="Texture2D" uid="uid://c533d2rpx7sf5" path="res://sprites/stolen_reimu.png" id="2_qtbhw"]
+[ext_resource type="Texture2D" uid="uid://7ra7357jmdbn" path="res://sprites/stolen_bullet.png" id="3_818le"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_dvb7b"]
 radius = 4.0
@@ -268,6 +269,28 @@ animations = [{
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_dwj84"]
 load_path = "res://.godot/imported/hitbox.png-af13967e02fb15528d70b6a699b587ea.ctex"
 
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_0x71x"]
+radius = 11.0
+height = 36.0
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_k3xw8"]
+lifetime_randomness = 0.03
+particle_flag_disable_z = true
+emission_shape = 1
+emission_sphere_radius = 8.0
+angle_min = -720.0
+angle_max = 720.0
+inherit_velocity_ratio = 1.0
+direction = Vector3(0, 0, 0)
+gravity = Vector3(0, 0, 0)
+linear_accel_min = 40.0
+linear_accel_max = 120.0
+radial_accel_min = 40.0
+radial_accel_max = 600.0
+scale_min = 0.0
+scale_max = 0.2
+color = Color(1, 0.666667, 1, 1)
+
 [node name="Player" type="Area2D"]
 script = ExtResource("1_7u1cn")
 
@@ -276,11 +299,32 @@ shape = SubResource("CircleShape2D_dvb7b")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_utf7y")
-animation = &"float"
-frame_progress = 0.82774
+animation = &"l_loop"
+frame_progress = 0.840019
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+visible = false
 texture = SubResource("CompressedTexture2D_dwj84")
+
+[node name="GrazeArea" type="Area2D" parent="."]
+visible = false
+collision_layer = 0
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GrazeArea"]
+shape = SubResource("CapsuleShape2D_0x71x")
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="."]
+emitting = false
+amount = 16
+process_material = SubResource("ParticleProcessMaterial_k3xw8")
+texture = ExtResource("3_818le")
+lifetime = 0.3
+one_shot = true
+randomness = 0.16
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
 
 [connection signal="body_entered" from="." to="." method="_on_collision"]
 [connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]
+[connection signal="area_entered" from="GrazeArea" to="." method="_on_collision"]

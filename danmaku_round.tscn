@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://dj8fpk1xy8oc6"]
+[gd_scene load_steps=8 format=3 uid="uid://dj8fpk1xy8oc6"]
 
 [ext_resource type="Script" path="res://danmaku.gd" id="1_d1l4b"]
 [ext_resource type="Shader" path="res://danmaku.gdshader" id="2_ffj7l"]
@@ -16,6 +16,9 @@ shader_parameter/light_offset = 0.5
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_7dkum"]
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_gbdrt"]
+radius = 11.0
+
 [node name="RigidBody2D" type="RigidBody2D" groups=["bullets"]]
 collision_mask = 0
 gravity_scale = 0.0
@@ -31,3 +34,11 @@ texture = ExtResource("3_axwvb")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_7dkum")
+
+[node name="grazearea" type="Area2D" parent="."]
+collision_layer = 4
+collision_mask = 0
+monitoring = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="grazearea"]
+shape = SubResource("CircleShape2D_gbdrt")
