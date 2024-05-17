@@ -21,60 +21,80 @@ func _process(delta):
 script = ExtResource("1_ocxcf")
 
 [node name="Message" type="Label" parent="."]
-anchors_preset = 10
-anchor_right = 1.0
-offset_bottom = 82.0
+anchors_preset = -1
+anchor_left = 0.130859
+anchor_right = 0.469141
+anchor_bottom = 0.0800781
+offset_left = 256.0
+offset_right = 256.0
 grow_horizontal = 2
 theme_override_fonts/font = ExtResource("2_wnxi6")
 theme_override_font_sizes/font_size = 64
 text = "SAMPLE TEXT"
 horizontal_alignment = 1
+metadata/_edit_use_anchors_ = true
 
 [node name="StartButton" type="Button" parent="."]
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -78.5
-offset_top = -35.0
-offset_right = 78.5
-offset_bottom = 35.0
+anchors_preset = -1
+anchor_left = 0.238672
+anchor_top = 0.46582
+anchor_right = 0.361328
+anchor_bottom = 0.53418
+offset_left = 256.0
+offset_right = 256.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_fonts/font = ExtResource("2_wnxi6")
 theme_override_font_sizes/font_size = 48
 text = "START"
 script = SubResource("GDScript_ke1p2")
+metadata/_edit_use_anchors_ = true
 
 [node name="MessageTimer" type="Timer" parent="."]
 wait_time = 2.0
 autostart = true
 
-[node name="Playerpos" type="Label" parent="."]
-offset_right = 40.0
-offset_bottom = 23.0
-
 [node name="Lives" type="Label" parent="."]
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -66.0
-offset_top = 11.0
-offset_bottom = 34.0
+anchors_preset = -1
+anchor_left = 0.55
+anchor_top = 0.0292969
+anchor_right = 0.601563
+anchor_bottom = 0.0517578
+offset_left = 512.0
+offset_right = 512.0
 grow_horizontal = 0
 theme_override_fonts/font = ExtResource("2_wnxi6")
 text = "❤️❤️❤️"
+metadata/_edit_use_anchors_ = true
 
 [node name="Score" type="Label" parent="."]
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -20.0
-offset_right = 20.0
-offset_bottom = 23.0
+anchors_preset = -1
+anchor_left = 0.234375
+anchor_right = 0.265625
+anchor_bottom = 0.0224609
+offset_left = 320.0
+offset_right = 320.0
 grow_horizontal = 2
 horizontal_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="DebugFireGen" type="CanvasLayer" parent="."]
+
+[node name="Add" type="Button" parent="DebugFireGen"]
+offset_right = 96.0
+offset_bottom = 30.0
+theme_override_font_sizes/font_size = 12
+text = "Add"
+
+[node name="LineEdit" type="LineEdit" parent="DebugFireGen"]
+offset_left = 98.0
+offset_right = 165.063
+offset_bottom = 31.0
+text = "1"
+
+[node name="Timer" type="Timer" parent="DebugFireGen"]
 
 [connection signal="pressed" from="StartButton" to="." method="_on_start_button_pressed"]
 [connection signal="timeout" from="MessageTimer" to="." method="_on_message_timer_timeout"]
+[connection signal="pressed" from="DebugFireGen/Add" to="." method="add"]
+[connection signal="timeout" from="DebugFireGen/Timer" to="." method="_on_debug_timer_timeout"]

@@ -1,25 +1,57 @@
-[gd_scene load_steps=4 format=3 uid="uid://bblnswffoeaen"]
+[gd_scene load_steps=9 format=3 uid="uid://bblnswffoeaen"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_5fvj4"]
 [ext_resource type="PackedScene" uid="uid://bgxuror8btpnu" path="res://player.tscn" id="3_3nbo7"]
 [ext_resource type="PackedScene" uid="uid://bcjqiny536b4a" path="res://hud.tscn" id="4_6uqea"]
+[ext_resource type="PackedScene" uid="uid://soaltsglfcaa" path="res://background.tscn" id="4_tthr2"]
+[ext_resource type="PackedScene" uid="uid://cfqsd1tbk42fr" path="res://foregrond.tscn" id="5_khovq"]
+
+[sub_resource type="Environment" id="Environment_ptff7"]
+background_mode = 3
+glow_enabled = true
+fog_enabled = true
+
+[sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_84uos"]
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_e8ytc"]
+outlines = Array[PackedVector2Array]([PackedVector2Array(-64, -64, 704, -64, 704, 768, -64, 768)])
+source_geometry_group_name = &"navigation_polygon_source_group"
 
 [node name="world" type="Node2D"]
 script = ExtResource("1_5fvj4")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_ptff7")
+camera_attributes = SubResource("CameraAttributesPractical_84uos")
 
 [node name="enemypos" type="Marker2D" parent="."]
 position = Vector2(8, 8)
 
 [node name="StartPos" type="Marker2D" parent="."]
-position = Vector2(640, 360)
+position = Vector2(320, 576)
 
 [node name="EnemyTimer" type="Timer" parent="."]
-wait_time = 6.0
+wait_time = 5.0
+
+[node name="HUD" parent="." instance=ExtResource("4_6uqea")]
+layer = 2
 
 [node name="Player" parent="." instance=ExtResource("3_3nbo7")]
 
-[node name="HUD" parent="." instance=ExtResource("4_6uqea")]
+[node name="NavigationRegion2D" type="NavigationRegion2D" parent="."]
+navigation_polygon = SubResource("NavigationPolygon_e8ytc")
+use_edge_connections = false
+
+[node name="Cleanup" type="Timer" parent="."]
+wait_time = 0.5
+autostart = true
+
+[node name="Node2D" parent="." instance=ExtResource("4_tthr2")]
+layer = -1
+
+[node name="CanvasLayer" parent="." instance=ExtResource("5_khovq")]
 
 [connection signal="timeout" from="EnemyTimer" to="." method="_on_EnemyTimer_timeout"]
-[connection signal="hit" from="Player" to="." method="game_over"]
 [connection signal="start_game" from="HUD" to="." method="game_start"]
+[connection signal="hit" from="Player" to="." method="game_over"]
+[connection signal="timeout" from="Cleanup" to="." method="_on_Cleanup_timeout"]

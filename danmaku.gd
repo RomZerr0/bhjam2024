@@ -2,42 +2,60 @@ extends RigidBody2D
 var start = Vector2.ZERO
 var direction = Vector2.ZERO
 var max = 780 # adjust this in distance
-var dmg = 0
+var dmg = 1
 var pow = 0
 var alive = false
-var order = 0
 var delayed_linear_velocity = Vector2.ZERO
 var screen_size
-var lifetime = 0
-var timer = 0.0
+var delay = 0.0 #dis is movilg_delay_from_start
+var timer = 0.0 #dis 4 stagger
 var color = "none"
+var fd = 0
 
-func _on_timer_timeout(t = timer):
-	await get_tree().create_timer(t).timeout
+func delayed_start(t = 0.0,d = 0.0):
+	if t != null:
+		await get_tree().create_timer(abs(t)).timeout
+	show()
+	if get_child(-1).name != "egg":
+		fade(0.07,4)
+	if d != null:
+		if d <= 0:
+			await get_tree().create_timer(abs(d)-abs(t)).timeout
+		else:
+			await get_tree().create_timer(d).timeout
 	linear_velocity = delayed_linear_velocity
-	$AudioStreamPlayer.play()
-	lifetime = 0
+	#$AudioStreamPlayer.play()
+	$DeathTimer.start()
+	
+func fade(t,d): #use msec i guess
+	$FadeTimer.wait_time = t
+	$FadeTimer.start()
+	$FadeTimer.connect("timeout",mod_fade.bind(d))
+
+		
+func mod_fade(amount):
+	amount = float(amount)
+	$AnimatedSprite2D.self_modulate.a += 1/amount
+	$AnimatedSprite2D.scale += Vector2(1/amount, 1/amount)
+	$Sprite2D.self_modulate.a += 1/amount
+	$Sprite2D.scale += Vector2(1/amount, 1/amount)
+	fd += 1/amount
+	if fd >= 1:
+		$FadeTimer.stop()
 
 func spawn():
-	$Sprite2D.scale = Vector2(0, 0)
-	$AnimatedSprite2D.scale = Vector2(0, 0)
-	$AnimatedSprite2D.self_modulate = Color(1, 1, 1, 0)
-	$Sprite2D.self_modulate = Color(1, 1, 1, 0)
-	$AudioStreamPlayer.play()
-	for i in range(10):
-		$AnimatedSprite2D.self_modulate.a += 0.1
-		$AnimatedSprite2D.scale += Vector2(0.1, 0.1)
-		$Sprite2D.self_modulate.a += 0.1
-		$Sprite2D.scale += Vector2(0.1, 0.1)
-		await get_tree().create_timer(0.01).timeout
-	if timer != 0.0:
-		await get_tree().create_timer(timer).timeout
-		linear_velocity = delayed_linear_velocity
-		$AudioStreamPlayer.play()
-		lifetime = 0
+	if get_child(-1).name != "egg":
+		$Sprite2D.scale = Vector2(fd, fd)
+		$AnimatedSprite2D.scale = Vector2(fd, fd)
+		$AnimatedSprite2D.self_modulate = Color(1, 1, 1, fd)
+		$Sprite2D.self_modulate = Color(1, 1, 1, fd)
+	#$AudioStreamPlayer.play()
+	$DeathTimer.start()
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	top_level = true
+	hide()
 	$AudioStreamPlayer.stream = get_node("..").shootsnd
 	if color == "none":
 		$Sprite2D.material.set_shader_parameter("sin_offset", 0.0)
@@ -49,25 +67,21 @@ func _ready():
 	if color == "blue":
 		$Sprite2D.material.set_shader_parameter("sin_offset", 270.0)
 		$Sprite2D.material.set_shader_parameter("sin_frequency", 2.0)
-	lifetime = 0
 	screen_size = get_viewport_rect().size
 	start = position
 	spawn()
 	
+func check_pos():
+	if timer != 0.0:
+		return
+	if position.x < Vector2.ZERO.x - 50 or position.x > screen_size.x + 50 or position.y < Vector2.ZERO.y - 50 or position.y > screen_size.y + 50:
+		queue_free()
+		
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(delta):
-	if position.x < Vector2.ZERO.x - 30 or position.x > screen_size.x + 30 or position.y < Vector2.ZERO.y - 30 or position.y > screen_size.y + 30:
-		queue_free()
-	lifetime += 1
-	position += direction
-	if lifetime > 800:
-		die()
+	pass
+	#position += direction
 		
-func die():
-	var scale = $CollisionShape2D.scale
-	for i in range(10):
-		$CollisionShape2D.scale = $CollisionShape2D.scale - ($CollisionShape2D.scale / 10)
-		$AnimatedSprite2D.scale = $AnimatedSprite2D.scale - ($AnimatedSprite2D.scale / 10)
-		$Sprite2D.scale = $Sprite2D.scale - ($Sprite2D.scale / 10)
-		await get_tree().create_timer(0.5).timeout
+func _die():
 	queue_free()
+

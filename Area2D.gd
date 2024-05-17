@@ -13,32 +13,48 @@ var grazesnd = []
 var dedsnd
 var firesnd
 var velocity  = Vector2.ZERO
+var death_debounce_time
+var kills = 0
+var con = 10
+var shader
+
 
 func start(pos):
 	position = pos
 	show()
 	$AnimatedSprite2D.animation = "float"
 	$AnimatedSprite2D.play()
+	shader.set_shader_parameter("dissolveAmount",0)
+
 	for i in range(20):
 		await get_tree().create_timer(0.1).timeout
-		$AnimatedSprite2D.self_modulate = Color(1, 1, 1, 1)
+		$AnimatedSprite2D.modulate = Color(1, 1, 1, 1)
 		await get_tree().create_timer(0.1).timeout
-		$AnimatedSprite2D.self_modulate = Color(1, 1, 1, 0)
-	$AnimatedSprite2D.self_modulate = Color(1, 1, 1, 1)
+		$AnimatedSprite2D.modulate = Color(1, 1, 1, 0)
+	$AnimatedSprite2D.modulate = Color(1, 1, 1, 1)
 	$GPUParticles2D.set_deferred("emitting", false)
-	$CollisionShape2D.set_deferred("disabled", false)
+	#$CollisionShape2D.set_deferred("disabled", false)
 	$GrazeArea/CollisionShape2D.set_deferred("disabled", false)
 
 func die():
+	if Time.get_unix_time_from_system() - death_debounce_time < 1:
+		return
+	death_debounce_time = Time.get_unix_time_from_system() 
 	$CollisionShape2D.set_deferred("disabled", true)
 	$GrazeArea/CollisionShape2D.set_deferred("disabled", true)
 	$AudioStreamPlayer2D.stream = dedsnd
 	$AudioStreamPlayer2D.play()
+	for i in range(25):
+		shader.set_shader_parameter("dissolveAmount",float(i/25.00))
+		await get_tree().create_timer(0.01).timeout
 	$AnimatedSprite2D.stop()
 	hide()
 	lives = lives - 1
+	
 	if lives <= 0:
 		score = 0
+		kills = 0
+		pow = 1
 		hit.emit()
 	else:
 		if pow > 1:
@@ -75,7 +91,7 @@ func fire(pow):
 	var angle = PI
 	var danmaku_speed = 500
 	var velocity = Vector2(0, -1) * danmaku_speed
-	if last_fired >= 10:
+	if last_fired >= 0.1:
 		for i in range(pow):
 			var bullet = bullet_scene.instantiate()
 			var offset = Vector2.ZERO
@@ -91,7 +107,9 @@ func fire(pow):
 		last_fired = 0
 
 func _ready():
+	shader = $AnimatedSprite2D.material
 	hide()
+	death_debounce_time = Time.get_unix_time_from_system() 
 	$CollisionShape2D.set_deferred("disabled", true)
 	screen_size = get_viewport_rect().size
 	grazesnd = [preload("res://sfx/ice-break-14765.wav"),preload("res://sfx/ice-break-147651.wav"),preload("res://sfx/ice-break-147652.wav"),preload("res://sfx/ice-break-147653.wav"),preload("res://sfx/ice-break-147654.wav"),preload("res://sfx/ice-break-147655.wav"),preload("res://sfx/ice-break-147656.wav"),preload("res://sfx/ice-break-147657.wav")]
@@ -112,6 +130,11 @@ func _on_animated_sprite_2d_animation_finished():
 	else:
 		print("BS!")
 		$AnimatedSprite2D.play("float")
+		
+func egginator():
+	con -= 1
+	if con <= 0:
+		get_node("..").egg()
 		
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(delta):
@@ -154,4 +177,4 @@ func _physics_process(delta):
 	position = position.clamp(Vector2.ZERO, screen_size)
 
 func _process(delta):
-	last_fired += 1
+	last_fired += delta 

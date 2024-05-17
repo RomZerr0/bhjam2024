@@ -73,6 +73,11 @@ animations = [{
 "loop": true,
 "name": &"idle",
 "speed": 10.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"needle",
+"speed": 5.0
 }]
 
 [node name="CharacterBody2D" type="CharacterBody2D" groups=["bullets"]]
@@ -85,8 +90,9 @@ position = Vector2(0.5, 0)
 shape = SubResource("RectangleShape2D_2a1bt")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+modulate = Color(1, 1, 1, 0.784314)
 sprite_frames = SubResource("SpriteFrames_h63tu")
 animation = &"idle"
-frame_progress = 0.016578
+frame_progress = 0.239299
 
 [connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_fade"]

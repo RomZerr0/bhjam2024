@@ -1,31 +1,36 @@
-[gd_scene load_steps=8 format=3 uid="uid://dj8fpk1xy8oc6"]
+[gd_scene load_steps=10 format=3 uid="uid://dj8fpk1xy8oc6"]
 
 [ext_resource type="Script" path="res://danmaku.gd" id="1_d1l4b"]
-[ext_resource type="Shader" path="res://danmaku.gdshader" id="2_ffj7l"]
+[ext_resource type="Shader" path="res://goop.gdshader" id="2_owbly"]
 [ext_resource type="Texture2D" uid="uid://dw6qh7f6k1cs" path="res://sprites/bullet_round.png" id="3_axwvb"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_7o5ht"]
-radius = 6.0
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_urcoy"]
+noise_type = 0
+frequency = 0.008
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_dkpvj"]
+noise = SubResource("FastNoiseLite_urcoy")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_casm6"]
-shader = ExtResource("2_ffj7l")
-shader_parameter/line_thickness = 0.01
-shader_parameter/sin_frequency = 0.1
-shader_parameter/sin_offset = 0.0
-shader_parameter/light_offset = 0.5
+shader = ExtResource("2_owbly")
+shader_parameter/strength = 0.3
+shader_parameter/direction = Vector2(1, 1)
+shader_parameter/color1 = Color(0, 0, 0, 1)
+shader_parameter/color2 = Color(1, 1, 1, 1)
+shader_parameter/flowMap = SubResource("NoiseTexture2D_dkpvj")
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_7dkum"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_gbdrt"]
 radius = 11.0
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_wnl0t"]
+radius = 6.0
+
 [node name="RigidBody2D" type="RigidBody2D" groups=["bullets"]]
 collision_mask = 0
 gravity_scale = 0.0
 script = ExtResource("1_d1l4b")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource("CircleShape2D_7o5ht")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 material = SubResource("ShaderMaterial_casm6")
@@ -41,7 +46,20 @@ collision_mask = 0
 monitoring = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="grazearea"]
+visible = false
 shape = SubResource("CircleShape2D_gbdrt")
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 bus = &"bullets"
+
+[node name="DeathTimer" type="Timer" parent="."]
+wait_time = 15.0
+one_shot = true
+
+[node name="FadeTimer" type="Timer" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
+shape = SubResource("CircleShape2D_wnl0t")
+
+[connection signal="timeout" from="DeathTimer" to="." method="_die"]

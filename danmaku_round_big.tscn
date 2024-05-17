@@ -1,0 +1,55 @@
+[gd_scene load_steps=8 format=3 uid="uid://wseh57r1xq48"]
+
+[ext_resource type="Script" path="res://danmaku.gd" id="1_d1akg"]
+[ext_resource type="Shader" path="res://danmaku.gdshader" id="2_jc2pa"]
+[ext_resource type="Texture2D" uid="uid://c8j6q7jv2t6k7" path="res://sprites/stolen_big_round.png" id="3_7768o"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qahsd"]
+shader = ExtResource("2_jc2pa")
+shader_parameter/line_thickness = 0.01
+shader_parameter/sin_frequency = 0.1
+shader_parameter/sin_offset = 0.0
+shader_parameter/light_offset = 0.5
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_vsw16"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_c7hes"]
+radius = 33.0151
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_3qajy"]
+radius = 13.0
+
+[node name="RigidBody2D" type="RigidBody2D" groups=["bullets"]]
+collision_mask = 0
+gravity_scale = 0.0
+script = ExtResource("1_d1akg")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_qahsd")
+rotation = 1.5708
+texture = ExtResource("3_7768o")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_vsw16")
+
+[node name="grazearea" type="Area2D" parent="."]
+collision_layer = 4
+collision_mask = 0
+monitoring = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="grazearea"]
+shape = SubResource("CircleShape2D_c7hes")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+bus = &"bullets"
+
+[node name="DeathTimer" type="Timer" parent="."]
+wait_time = 15.0
+one_shot = true
+
+[node name="FadeTimer" type="Timer" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_3qajy")
+
+[connection signal="timeout" from="DeathTimer" to="." method="_die"]
