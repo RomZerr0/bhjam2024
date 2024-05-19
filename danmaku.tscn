@@ -2,23 +2,21 @@
 
 [ext_resource type="Script" path="res://danmaku.gd" id="1_6p6bt"]
 [ext_resource type="Shader" path="res://danmaku.gdshader" id="1_7f2cc"]
-[ext_resource type="Texture2D" uid="uid://7ra7357jmdbn" path="res://sprites/stolen_bullet.png" id="1_j2uam"]
+[ext_resource type="Texture2D" uid="uid://7ra7357jmdbn" path="res://sprites/bullet.png" id="1_j2uam"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_0blps"]
 radius = 4.0
-height = 10.0
+height = 12.0
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_0o80t"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_13rh2"]
 shader = ExtResource("1_7f2cc")
-shader_parameter/line_thickness = 0.8
-shader_parameter/sin_frequency = 0.1
-shader_parameter/sin_offset = 0.0
-shader_parameter/light_offset = 0.5
+shader_parameter/line_thickness = 0.0
+shader_parameter/outline_color = Color(1, 0, 0, 1)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_7cjva"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_l3tyh"]
-radius = 8.0
+radius = 7.0
 height = 22.0
 
 [node name="RigidBody2D" type="RigidBody2D" groups=["bullets"]]
@@ -31,7 +29,8 @@ rotation = 1.5708
 shape = SubResource("CapsuleShape2D_0blps")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-material = SubResource("ShaderMaterial_0o80t")
+self_modulate = Color(8.90419e-07, 0.35554, 0.382113, 1)
+material = SubResource("ShaderMaterial_13rh2")
 rotation = 1.5708
 texture = ExtResource("1_j2uam")
 

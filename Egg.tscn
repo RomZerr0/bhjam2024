@@ -7,9 +7,7 @@
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_oxfp2"]
 shader = ExtResource("2_qeyot")
 shader_parameter/line_thickness = 8.325
-shader_parameter/sin_frequency = 1.808
-shader_parameter/sin_offset = 20.225
-shader_parameter/light_offset = 0.376
+shader_parameter/outline_color = Color(1, 0, 0, 1)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_r6xwk"]
 

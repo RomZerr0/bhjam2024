@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://danmaku.gd" id="1_d1akg"]
 [ext_resource type="Shader" path="res://danmaku.gdshader" id="2_jc2pa"]
-[ext_resource type="Texture2D" uid="uid://c8j6q7jv2t6k7" path="res://sprites/stolen_big_round.png" id="3_7768o"]
+[ext_resource type="Texture2D" uid="uid://c8j6q7jv2t6k7" path="res://sprites/big_round.png" id="3_7768o"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_qahsd"]
 shader = ExtResource("2_jc2pa")

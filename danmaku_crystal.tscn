@@ -2,7 +2,6 @@
 
 [ext_resource type="Script" path="res://danmaku.gd" id="1_fttab"]
 [ext_resource type="Shader" path="res://danmaku.gdshader" id="2_payw1"]
-[ext_resource type="Texture2D" uid="uid://3t23fmtj4e21" path="res://sprites/stolen_crystal.png" id="3_lofl1"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_yknha"]
 radius = 4.0
@@ -10,10 +9,11 @@ height = 12.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_qahsd"]
 shader = ExtResource("2_payw1")
-shader_parameter/line_thickness = 0.01
-shader_parameter/sin_frequency = 0.1
-shader_parameter/sin_offset = 0.0
-shader_parameter/light_offset = 0.5
+shader_parameter/line_thickness = 0.5
+shader_parameter/outline_color = Color(1, 0, 0, 1)
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_jxuog"]
+load_path = "res://.godot/imported/stolen_crystal.png-5911b72735ca6a37ca6e2e571a17b8d6.ctex"
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_vsw16"]
 
@@ -31,7 +31,7 @@ shape = SubResource("CapsuleShape2D_yknha")
 [node name="Sprite2D" type="Sprite2D" parent="."]
 material = SubResource("ShaderMaterial_qahsd")
 rotation = 1.5708
-texture = ExtResource("3_lofl1")
+texture = SubResource("CompressedTexture2D_jxuog")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_vsw16")

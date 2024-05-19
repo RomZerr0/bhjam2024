@@ -1,10 +1,11 @@
 shader_type canvas_item;
 
-
+uniform int pixelation_amount = 40; 
 uniform vec4 WATER_COL : source_color =  vec4(0.176471, 0.635294, 0.85098, 1.0);
 uniform vec4 WATER2_COL : source_color =  vec4(0.0588235, 0.529412, 0.776471, 1.0);
 uniform vec4 FOAM_COL : source_color = vec4(0.87451, 0.988235, 1, 1.0);
 uniform vec2 velocity = vec2(1.0, 1.0);
+uniform float speed;
 uniform sampler2D noise;
 
 uniform float distortion_speed = 2.0;
@@ -26,7 +27,8 @@ float circ(vec2 pos, vec2 c, float s)
 
 float waterlayer(vec2 uv)
 {
-    uv = mod(uv, 1.0); // Clamp to [0..1]
+	vec2 grid_uv = round(uv * float(pixelation_amount)) / float(pixelation_amount);
+    uv = mod(grid_uv, 1.0); // Clamp to [0..1]
     float ret = 1.0;
     ret += circ(uv, vec2(0.37378, 0.277169), 0.0268181);
     ret += circ(uv, vec2(0.0317477, 0.540372), 0.0193742);
@@ -150,5 +152,5 @@ void vertex(){
 
 void fragment() {
 	vec2 uv = globalposition / 32.0;
-	COLOR.rgb = vec3(water(uv * tile + offset, vec3(0,1,0), TIME * distortion_speed));
+	COLOR.rgb = vec3(water(uv * tile + offset + vec2(0,TIME * speed), vec3(0,1,0), TIME * distortion_speed));
 }

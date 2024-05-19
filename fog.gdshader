@@ -1,39 +1,60 @@
 shader_type canvas_item;
 
-// Amount of detail.
-uniform int octaves = 4;
+// Credit for the original shader goes to Gonkee: https://github.com/Gonkee/Gonkees-Shaders/blob/master/fog.shader
+// Godot Shaders for the pixelation: https://godotshaders.com/shader/pixelate/
 
-// Opacity of the output fog.
-uniform float starting_amplitude: hint_range(0.0, 0.5) = 0.5;
+uniform vec4 color : source_color;  // Use hint_color for easier color picking
+uniform int OCTAVES = 4;
+uniform int pixelation_amount = 40;  // If you don't want any pixelation. Set this to something high like 1000
+uniform sampler2D fog_mask;  // Texture mask for fog control
 
-// Rate of pattern within the fog.
-uniform float starting_frequency = 1.0;
+float rand(vec2 coord){
+    return fract(sin(dot(coord, vec2(56, 78)) * 1000.0) * 1000.0);
+}
 
-// Shift towards transparency (clamped) for sparser fog.
-uniform float shift: hint_range(-1.0, 0.0) = -0.2;
+float noise(vec2 coord){
+    vec2 i = floor(coord);
+    vec2 f = fract(coord);
 
-// Direction and speed of travel.
-uniform vec2 velocity = vec2(1.0, 1.0);
+    float a = rand(i);
+    float b = rand(i + vec2(1.0, 0.0));
+    float c = rand(i + vec2(0.0, 1.0));
+    float d = rand(i + vec2(1.0, 1.0));
 
-// Color of the fog.
-uniform vec4 fog_color: source_color = vec4(0.0, 0.0, 0.0, 1.0);
+    vec2 cubic = f * f * (3.0 - 2.0 * f);
 
-// Noise texture; OpenSimplexNoise is great, but any filtered texture is fine.
-uniform sampler2D noise;
+    return mix(a, b, cubic.x) + (c - a) * cubic.y * (1.0 - cubic.x) + (d - b) * cubic.x * cubic.y;
+}
 
-float rand(vec2 uv) {
-	float amplitude = starting_amplitude;
-	float frequency = starting_frequency;
-	float output = 0.0;
-	for (int i = 0; i < octaves; i++) {
-		output += texture(noise, uv * frequency).x * amplitude;
-		amplitude /= 2.0;
-		frequency *= 2.0;
-	}
-	return clamp(output + shift, 0.0, 1.0);
+float fbm(vec2 coord){
+    float value = 0.0;
+    float scale = 0.5;
+
+    for(int i = 0; i < OCTAVES; i++){
+        value += noise(coord) * scale;
+        coord *= 2.0;
+        scale *= 0.5;
+    }
+    return value;
 }
 
 void fragment() {
-	vec2 motion = vec2(rand(UV + TIME * starting_frequency * velocity));
-	COLOR = mix(vec4(0.0), fog_color, rand(UV + motion));
+    // Apply pixelation
+    vec2 grid_uv = round(UV * float(pixelation_amount)) / float(pixelation_amount);
+    
+    // Compute noise based on pixelated coordinates
+    vec2 coord = grid_uv * 20.0;
+
+    vec2 motion = vec2(fbm(coord + vec2(TIME * -0.5, TIME * 0.5)));
+
+    float final = fbm(coord + vec2(TIME * 0.8, TIME * -0.8));
+    
+    // Get the fog density from the texture mask
+    float mask_value = texture(fog_mask, UV).r;  // Assuming the mask is grayscale
+    
+    // Modulate the fog density by the mask value
+    final *= mask_value;
+
+    // Use the alpha value of the color to control the overall fog opacity
+    COLOR = vec4(color.rgb, final * color.a * 0.5);
 }

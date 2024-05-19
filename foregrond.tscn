@@ -1,31 +1,108 @@
-[gd_scene load_steps=5 format=3 uid="uid://cfqsd1tbk42fr"]
+[gd_scene load_steps=16 format=3 uid="uid://cfqsd1tbk42fr"]
 
-[ext_resource type="Shader" path="res://wiggle.gdshader" id="1_0ja0y"]
+[ext_resource type="Script" path="res://foregrond.gd" id="1_bco6j"]
+[ext_resource type="Shader" path="res://boom.gdshader" id="3_3003b"]
+[ext_resource type="Shader" path="res://star.gdshader" id="4_qftwb"]
+[ext_resource type="Shader" path="res://stars.gdshader" id="5_qeis7"]
 
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_s0wak"]
-noise_type = 0
-frequency = 0.0112
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_fd505"]
+frequency = 0.0153
 
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_1eh8k"]
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_1tec3"]
 seamless = true
-seamless_blend_skirt = 0.359
-noise = SubResource("FastNoiseLite_s0wak")
+seamless_blend_skirt = 0.953
+noise = SubResource("FastNoiseLite_fd505")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_5i1kd"]
-shader = ExtResource("1_0ja0y")
-shader_parameter/strength = 1.5
-shader_parameter/uv_scaling = 0.8
-shader_parameter/movement_direction = Vector2(0, 2)
-shader_parameter/movement_speed = 0.04
-shader_parameter/NOISE_TEXTURE = SubResource("NoiseTexture2D_1eh8k")
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_3agxg"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_mmm71"]
+noise = SubResource("FastNoiseLite_3agxg")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_xnxfe"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_5dihx"]
+noise = SubResource("FastNoiseLite_xnxfe")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ofcqn"]
+shader = ExtResource("3_3003b")
+shader_parameter/screen_resolution = 1.0
+shader_parameter/alpha = 1.0
+shader_parameter/iChannel0 = SubResource("NoiseTexture2D_1tec3")
+shader_parameter/iChannel1 = SubResource("NoiseTexture2D_mmm71")
+shader_parameter/iChannel2 = SubResource("NoiseTexture2D_5dihx")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ihqy2"]
+shader = ExtResource("4_qftwb")
+shader_parameter/alpha = 0.6
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_ssbm5"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_lcr3y"]
+noise = SubResource("FastNoiseLite_ssbm5")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8fkd5"]
+shader = ExtResource("5_qeis7")
+shader_parameter/line_color = Color(1, 1, 1, 1)
+shader_parameter/line_count = 2.0
+shader_parameter/line_density = 0.466
+shader_parameter/line_faloff = 1.0
+shader_parameter/mask_size = 1.0
+shader_parameter/mask_edge = 0.0
+shader_parameter/animation_speed = 3.348
+shader_parameter/noise = SubResource("NoiseTexture2D_lcr3y")
 
 [node name="CanvasLayer" type="CanvasLayer"]
+script = ExtResource("1_bco6j")
 
-[node name="ColorRect" type="ColorRect" parent="."]
-material = SubResource("ShaderMaterial_5i1kd")
+[node name="BackBufferCopy3" type="BackBufferCopy" parent="."]
+position = Vector2(320, 384)
+scale = Vector2(3.2, 3.84)
+copy_mode = 2
+
+[node name="Boom" type="ColorRect" parent="BackBufferCopy3"]
+modulate = Color(1, 1, 1, 0.94902)
+material = SubResource("ShaderMaterial_ofcqn")
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = -100.0
+offset_top = -100.0
+offset_right = -100.0
+offset_bottom = -100.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.986752, 0.986752, 0.986752, 1)
+
+[node name="BackBufferCopy2" type="BackBufferCopy" parent="."]
+position = Vector2(320, 384)
+scale = Vector2(3.2, 3.84)
+copy_mode = 2
+
+[node name="Spell" type="ColorRect" parent="BackBufferCopy2"]
+material = SubResource("ShaderMaterial_ihqy2")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -100.0
+offset_top = -100.0
+offset_right = -100.0
+offset_bottom = -100.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(1, 0, 1, 1)
+
+[node name="BackBufferCopy" type="BackBufferCopy" parent="."]
+position = Vector2(320, 384)
+scale = Vector2(3.2, 3.84)
+copy_mode = 2
+
+[node name="Speedlines" type="ColorRect" parent="BackBufferCopy"]
+material = SubResource("ShaderMaterial_8fkd5")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -100.0
+offset_top = -100.0
+offset_right = -100.0
+offset_bottom = -100.0
+grow_horizontal = 2
+grow_vertical = 2

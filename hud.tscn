@@ -1,7 +1,40 @@
-[gd_scene load_steps=4 format=3 uid="uid://bcjqiny536b4a"]
+[gd_scene load_steps=13 format=3 uid="uid://bcjqiny536b4a"]
 
 [ext_resource type="Script" path="res://HUD.gd" id="1_ocxcf"]
+[ext_resource type="Shader" path="res://outline.gdshader" id="2_25f03"]
 [ext_resource type="FontFile" uid="uid://dyejh2p28g8ji" path="res://ari-w9500.ttf" id="2_wnxi6"]
+[ext_resource type="Texture2D" uid="uid://bpraldb1cnkw8" path="res://splash.png" id="3_wyoha"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_dqs18"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_m2uuv"]
+seamless = true
+seamless_blend_skirt = 0.7
+noise = SubResource("FastNoiseLite_dqs18")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1nta4"]
+shader = ExtResource("2_25f03")
+shader_parameter/noiseTiling = 2.0
+shader_parameter/dissolveAmount = 0.0
+shader_parameter/edgeThickness = 0.02
+shader_parameter/edgeColor = Color(0.384646, 3.10143e-06, 1.8049e-06, 1)
+shader_parameter/noiseTexture = SubResource("NoiseTexture2D_m2uuv")
+
+[sub_resource type="InputEventKey" id="InputEventKey_1x32a"]
+device = -1
+pressed = true
+keycode = 4194305
+
+[sub_resource type="Shortcut" id="Shortcut_i2i7l"]
+events = [SubResource("InputEventKey_1x32a")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_cbepn"]
+device = -1
+pressed = true
+keycode = 4194309
+
+[sub_resource type="Shortcut" id="Shortcut_df2kw"]
+events = [SubResource("InputEventKey_cbepn")]
 
 [sub_resource type="GDScript" id="GDScript_ke1p2"]
 script/source = "extends Button
@@ -20,73 +53,137 @@ func _process(delta):
 [node name="HUD" type="CanvasLayer"]
 script = ExtResource("1_ocxcf")
 
+[node name="bg" type="TextureRect" parent="."]
+material = SubResource("ShaderMaterial_1nta4")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 2565.0
+offset_bottom = 3077.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.2, 0.2)
+mouse_filter = 2
+texture = ExtResource("3_wyoha")
+stretch_mode = 4
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+
 [node name="Message" type="Label" parent="."]
-anchors_preset = -1
-anchor_left = 0.130859
-anchor_right = 0.469141
-anchor_bottom = 0.0800781
-offset_left = 256.0
-offset_right = 256.0
+visible = false
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 82.0
 grow_horizontal = 2
 theme_override_fonts/font = ExtResource("2_wnxi6")
 theme_override_font_sizes/font_size = 64
 text = "SAMPLE TEXT"
 horizontal_alignment = 1
-metadata/_edit_use_anchors_ = true
+
+[node name="Credits" type="RichTextLabel" parent="."]
+visible = false
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 292.0
+grow_vertical = 2
+text = "Huge thanks to:
+
+Gafurov Timur - music assistance
+Anastasiya Kalikina - art assistance
+Mikhail Lugovoi - code assistance
+
+godotshaders.com
+pixabay.com
+
+"
+
+[node name="ExitButton" type="Button" parent="."]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -164.0
+offset_top = -114.0
+offset_right = -1.0
+offset_bottom = -83.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_fonts/font = ExtResource("2_wnxi6")
+shortcut = SubResource("Shortcut_i2i7l")
+text = "Exit
+"
+
+[node name="CreditsButton" type="Button" parent="."]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -204.0
+offset_top = -166.0
+offset_right = -1.0
+offset_bottom = -133.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_fonts/font = ExtResource("2_wnxi6")
+text = "Credits"
 
 [node name="StartButton" type="Button" parent="."]
-anchors_preset = -1
-anchor_left = 0.238672
-anchor_top = 0.46582
-anchor_right = 0.361328
-anchor_bottom = 0.53418
-offset_left = 256.0
-offset_right = 256.0
-grow_horizontal = 2
-grow_vertical = 2
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -236.0
+offset_top = -253.0
+offset_right = -1.0
+offset_bottom = -183.0
+grow_horizontal = 0
+grow_vertical = 0
 theme_override_fonts/font = ExtResource("2_wnxi6")
 theme_override_font_sizes/font_size = 48
-text = "START"
+shortcut = SubResource("Shortcut_df2kw")
+text = "Start"
 script = SubResource("GDScript_ke1p2")
-metadata/_edit_use_anchors_ = true
 
 [node name="MessageTimer" type="Timer" parent="."]
 wait_time = 2.0
 autostart = true
 
 [node name="Lives" type="Label" parent="."]
-anchors_preset = -1
-anchor_left = 0.55
-anchor_top = 0.0292969
-anchor_right = 0.601563
-anchor_bottom = 0.0517578
-offset_left = 512.0
-offset_right = 512.0
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -66.0
+offset_top = 22.0
+offset_bottom = 43.0
 grow_horizontal = 0
 theme_override_fonts/font = ExtResource("2_wnxi6")
 text = "❤️❤️❤️"
-metadata/_edit_use_anchors_ = true
 
 [node name="Score" type="Label" parent="."]
-anchors_preset = -1
-anchor_left = 0.234375
-anchor_right = 0.265625
-anchor_bottom = 0.0224609
-offset_left = 320.0
-offset_right = 320.0
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -0.5
+offset_right = 0.5
+offset_bottom = 23.0
 grow_horizontal = 2
 horizontal_alignment = 1
-metadata/_edit_use_anchors_ = true
 
 [node name="DebugFireGen" type="CanvasLayer" parent="."]
 
 [node name="Add" type="Button" parent="DebugFireGen"]
+visible = false
+z_index = 1
 offset_right = 96.0
 offset_bottom = 30.0
 theme_override_font_sizes/font_size = 12
 text = "Add"
 
 [node name="LineEdit" type="LineEdit" parent="DebugFireGen"]
+visible = false
 offset_left = 98.0
 offset_right = 165.063
 offset_bottom = 31.0
@@ -94,7 +191,22 @@ text = "1"
 
 [node name="Timer" type="Timer" parent="DebugFireGen"]
 
+[node name="Label" type="Label" parent="."]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -212.5
+offset_right = 212.5
+offset_bottom = 67.0
+grow_horizontal = 2
+theme_override_fonts/font = ExtResource("2_wnxi6")
+theme_override_font_sizes/font_size = 37
+text = "Get the HELL out of here!"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="pressed" from="ExitButton" to="." method="_on_exit_button_pressed"]
+[connection signal="pressed" from="CreditsButton" to="." method="_on_credits_button_pressed"]
 [connection signal="pressed" from="StartButton" to="." method="_on_start_button_pressed"]
-[connection signal="timeout" from="MessageTimer" to="." method="_on_message_timer_timeout"]
 [connection signal="pressed" from="DebugFireGen/Add" to="." method="add"]
 [connection signal="timeout" from="DebugFireGen/Timer" to="." method="_on_debug_timer_timeout"]

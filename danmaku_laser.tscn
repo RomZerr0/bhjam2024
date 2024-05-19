@@ -2,14 +2,14 @@
 
 [ext_resource type="Script" path="res://danmaku.gd" id="1_0xlc3"]
 [ext_resource type="Shader" path="res://danmaku.gdshader" id="2_ilvtb"]
-[ext_resource type="Texture2D" uid="uid://o4oimrtjn4vi" path="res://sprites/stolen_laser.png" id="3_maye7"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_qahsd"]
 shader = ExtResource("2_ilvtb")
 shader_parameter/line_thickness = 0.01
-shader_parameter/sin_frequency = 0.1
-shader_parameter/sin_offset = 0.0
-shader_parameter/light_offset = 0.5
+shader_parameter/outline_color = Color(1, 0, 0, 1)
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_h2tmr"]
+load_path = "res://.godot/imported/stolen_laser.png-bb472088b191b83f2bc2c09bfad5fbd3.ctex"
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_vsw16"]
 
@@ -27,7 +27,7 @@ script = ExtResource("1_0xlc3")
 [node name="Sprite2D" type="Sprite2D" parent="."]
 material = SubResource("ShaderMaterial_qahsd")
 rotation = 1.5708
-texture = ExtResource("3_maye7")
+texture = SubResource("CompressedTexture2D_h2tmr")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_vsw16")

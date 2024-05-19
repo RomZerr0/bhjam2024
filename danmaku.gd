@@ -9,7 +9,7 @@ var delayed_linear_velocity = Vector2.ZERO
 var screen_size
 var delay = 0.0 #dis is movilg_delay_from_start
 var timer = 0.0 #dis 4 stagger
-var color = "none"
+var color
 var fd = 0
 
 func delayed_start(t = 0.0,d = 0.0):
@@ -47,26 +47,25 @@ func spawn():
 	if get_child(-1).name != "egg":
 		$Sprite2D.scale = Vector2(fd, fd)
 		$AnimatedSprite2D.scale = Vector2(fd, fd)
-		$AnimatedSprite2D.self_modulate = Color(1, 1, 1, fd)
-		$Sprite2D.self_modulate = Color(1, 1, 1, fd)
-	#$AudioStreamPlayer.play()
+	#$Sprite2D.material.set_shader_parameter("line_thickness",0.5)
+	#$Sprite2D.material.set_shader_parameter("outline_color",color)
+	#$Sprite2D.material.set_shader_parameter("outline_color",Vector4(1,0,0,0))
+	if pow!= 0:
+		show()
 	$DeathTimer.start()
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	$Sprite2D.material = $Sprite2D.material.duplicate()
+	if color != null:
+		if color != Vector4.ZERO:
+			if color.x or color.y or color.z or color.w != null:
+				#$Sprite2D.material.set_shader_parameter("line_thickness",0.5)
+				$Sprite2D.material.set_shader_parameter("outline_color",Vector4(color))
+				$Sprite2D.self_modulate = Color(color.x,color.y,color.z,color.w)
 	top_level = true
 	hide()
-	$AudioStreamPlayer.stream = get_node("..").shootsnd
-	if color == "none":
-		$Sprite2D.material.set_shader_parameter("sin_offset", 0.0)
-	if color == "red":
-		$Sprite2D.material.set_shader_parameter("sin_offset", 90.0)
-		$Sprite2D.material.set_shader_parameter("sin_frequency", 0.5)
-	if color == "green":
-		$Sprite2D.material.set_shader_parameter("sin_offset", 180.0)
-	if color == "blue":
-		$Sprite2D.material.set_shader_parameter("sin_offset", 270.0)
-		$Sprite2D.material.set_shader_parameter("sin_frequency", 2.0)
+	#$AudioStreamPlayer.stream = get_node("..").shootsnd
 	screen_size = get_viewport_rect().size
 	start = position
 	spawn()

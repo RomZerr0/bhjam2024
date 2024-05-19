@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://bcjqiny536b4a" path="res://hud.tscn" id="4_6uqea"]
 [ext_resource type="PackedScene" uid="uid://soaltsglfcaa" path="res://background.tscn" id="4_tthr2"]
 [ext_resource type="PackedScene" uid="uid://cfqsd1tbk42fr" path="res://foregrond.tscn" id="5_khovq"]
+[ext_resource type="PackedScene" uid="uid://bh70l6m8fupxb" path="res://boom.tscn" id="6_dr65p"]
 
 [sub_resource type="Environment" id="Environment_ptff7"]
 background_mode = 3
@@ -13,12 +14,11 @@ fog_enabled = true
 
 [sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_84uos"]
 
-[sub_resource type="NavigationPolygon" id="NavigationPolygon_e8ytc"]
-outlines = Array[PackedVector2Array]([PackedVector2Array(-64, -64, 704, -64, 704, 768, -64, 768)])
-source_geometry_group_name = &"navigation_polygon_source_group"
-
 [node name="world" type="Node2D"]
 script = ExtResource("1_5fvj4")
+
+[node name="Foregrond" parent="." instance=ExtResource("5_khovq")]
+layer = -1
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_ptff7")
@@ -28,30 +28,37 @@ camera_attributes = SubResource("CameraAttributesPractical_84uos")
 position = Vector2(8, 8)
 
 [node name="StartPos" type="Marker2D" parent="."]
-position = Vector2(320, 576)
+position = Vector2(352, 672)
 
 [node name="EnemyTimer" type="Timer" parent="."]
-wait_time = 5.0
-
-[node name="HUD" parent="." instance=ExtResource("4_6uqea")]
-layer = 2
-
-[node name="Player" parent="." instance=ExtResource("3_3nbo7")]
-
-[node name="NavigationRegion2D" type="NavigationRegion2D" parent="."]
-navigation_polygon = SubResource("NavigationPolygon_e8ytc")
-use_edge_connections = false
+wait_time = 4.5
 
 [node name="Cleanup" type="Timer" parent="."]
 wait_time = 0.5
 autostart = true
 
-[node name="Node2D" parent="." instance=ExtResource("4_tthr2")]
-layer = -1
+[node name="BackBufferCopy2" type="BackBufferCopy" parent="."]
+position = Vector2(320, 384)
+scale = Vector2(3.2, 3.84)
+copy_mode = 2
 
-[node name="CanvasLayer" parent="." instance=ExtResource("5_khovq")]
+[node name="Boom" parent="BackBufferCopy2" instance=ExtResource("6_dr65p")]
+layer = 3
+
+[node name="HUD" parent="." instance=ExtResource("4_6uqea")]
+layer = 3
+
+[node name="bg" parent="." instance=ExtResource("4_tthr2")]
+layer = -2
+
+[node name="Player" parent="." instance=ExtResource("3_3nbo7")]
+z_index = 4
+position = Vector2(448, 320)
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+max_polyphony = 8
 
 [connection signal="timeout" from="EnemyTimer" to="." method="_on_EnemyTimer_timeout"]
+[connection signal="timeout" from="Cleanup" to="." method="_on_Cleanup_timeout"]
 [connection signal="start_game" from="HUD" to="." method="game_start"]
 [connection signal="hit" from="Player" to="." method="game_over"]
-[connection signal="timeout" from="Cleanup" to="." method="_on_Cleanup_timeout"]

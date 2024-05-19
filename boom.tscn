@@ -1,0 +1,32 @@
+[gd_scene load_steps=4 format=3 uid="uid://bh70l6m8fupxb"]
+
+[ext_resource type="Shader" path="res://shock.gdshader" id="1_tpuq1"]
+[ext_resource type="Script" path="res://boom.gd" id="1_uvnva"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vngyd"]
+shader = ExtResource("1_tpuq1")
+shader_parameter/global_position = Vector2(320, 384)
+shader_parameter/screen_size = Vector2(640, 768)
+shader_parameter/force = 0.1
+shader_parameter/size = 0.0
+shader_parameter/thickness = 0.4
+
+[node name="Boom" type="CanvasLayer"]
+script = ExtResource("1_uvnva")
+
+[node name="BackBufferCopy" type="BackBufferCopy" parent="."]
+position = Vector2(319, 383)
+scale = Vector2(3.19, 3.83)
+copy_mode = 2
+
+[node name="Boom" type="ColorRect" parent="BackBufferCopy"]
+material = SubResource("ShaderMaterial_vngyd")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -100.0
+offset_top = -100.0
+offset_right = -100.0
+offset_bottom = -100.0
+grow_horizontal = 2
+grow_vertical = 2

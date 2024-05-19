@@ -17,9 +17,11 @@ var death_debounce_time
 var kills = 0
 var con = 10
 var shader
+var alive = true
 
 
 func start(pos):
+	alive = true
 	position = pos
 	show()
 	$AnimatedSprite2D.animation = "float"
@@ -33,10 +35,11 @@ func start(pos):
 		$AnimatedSprite2D.modulate = Color(1, 1, 1, 0)
 	$AnimatedSprite2D.modulate = Color(1, 1, 1, 1)
 	$GPUParticles2D.set_deferred("emitting", false)
-	#$CollisionShape2D.set_deferred("disabled", false)
+	$CollisionShape2D.set_deferred("disabled", false)
 	$GrazeArea/CollisionShape2D.set_deferred("disabled", false)
 
 func die():
+	alive = false
 	if Time.get_unix_time_from_system() - death_debounce_time < 1:
 		return
 	death_debounce_time = Time.get_unix_time_from_system() 
@@ -60,7 +63,8 @@ func die():
 		if pow > 1:
 			pow = pow / 2
 		await get_tree().create_timer(3).timeout
-		start(get_node("../StartPos").position) 
+		start(get_node("../StartPos").position)
+		alive = true 
 
 func _on_collision(body):
 	if body.collision_layer == 1:
@@ -70,7 +74,7 @@ func _on_collision(body):
 				die()
 			else:
 				pow = pow + body.pow
-				body.die()
+				body._die()
 		if body.alive == true:
 			body.die()
 			await get_tree().create_timer(0.01).timeout
@@ -87,20 +91,27 @@ func graze():
 	
 	
 func fire(pow):
+	if !alive:
+		return
+	var num
 	var bullet_scene = load("res://player_bullet.tscn")
 	var angle = PI
 	var danmaku_speed = 500
 	var velocity = Vector2(0, -1) * danmaku_speed
+	if pow > 14:
+		pow = 14
+	num = int((pow / 5)) + 1
 	if last_fired >= 0.1:
-		for i in range(pow):
+		for i in range(num):
 			var bullet = bullet_scene.instantiate()
 			var offset = Vector2.ZERO
-			offset.x = -(pow - 1) * 12 / 2 + i * 12
+			offset.x = -(num - 1) * 12 / 2 + i * 12
 			bullet.position = global_position + (offset)
 			bullet.linear_velocity = velocity
 			bullet.top_level = true
 			bullet.rotation = PI/2
-			bullet.dmg = pow
+			bullet.dmg = pow % 5 + 1
+			bullet.hue = pow % 5 + 1
 			add_child(bullet)
 			$AudioStreamPlayer2D.stream = firesnd
 			$AudioStreamPlayer2D.play(0.20)
@@ -116,21 +127,6 @@ func _ready():
 	dedsnd = preload("res://sfx/ded.mp3")
 	firesnd = preload("res://sfx/fire.wav")
 	
-func _on_animated_sprite_2d_animation_finished():
-	if $AnimatedSprite2D.animation == "left" and anim_backwards == false:
-		$AnimatedSprite2D.play("l_loop")
-	elif $AnimatedSprite2D.animation == "right" and anim_backwards == false:
-		$AnimatedSprite2D.play("r_loop")
-	elif $AnimatedSprite2D.animation == "right" and anim_backwards == true:
-		anim_backwards = false
-		$AnimatedSprite2D.play("float")
-	elif $AnimatedSprite2D.animation == "left" and anim_backwards == true:
-		anim_backwards = false
-		$AnimatedSprite2D.play("float")
-	else:
-		print("BS!")
-		$AnimatedSprite2D.play("float")
-		
 func egginator():
 	con -= 1
 	if con <= 0:
@@ -158,21 +154,6 @@ func _physics_process(delta):
 			velocity = velocity.normalized() * speed/2
 		else:
 			velocity = velocity.normalized() * speed
-		if velocity.x < 0:
-			if $AnimatedSprite2D.animation != "l_loop":
-				$AnimatedSprite2D.play("left")
-				anim_backwards = false
-		if velocity.x > 0:
-			if $AnimatedSprite2D.animation != "r_loop":
-				$AnimatedSprite2D.play("right")
-				anim_backwards = false
-	if velocity.x == 0:
-		if $AnimatedSprite2D.animation == "right" or $AnimatedSprite2D.animation == "r_loop":
-			anim_backwards = true
-			$AnimatedSprite2D.play_backwards("right")
-		if $AnimatedSprite2D.animation == "left" or $AnimatedSprite2D.animation == "l_loop":
-			anim_backwards = true
-			$AnimatedSprite2D.play_backwards("left")
 	position += velocity * delta
 	position = position.clamp(Vector2.ZERO, screen_size)
 

@@ -1,62 +1,95 @@
-[gd_scene load_steps=13 format=3 uid="uid://soaltsglfcaa"]
+[gd_scene load_steps=15 format=3 uid="uid://soaltsglfcaa"]
 
 [ext_resource type="Script" path="res://bg.gd" id="1_lx3tm"]
-[ext_resource type="Shader" path="res://bg/land.gdshader" id="3_gw4n4"]
+[ext_resource type="Shader" path="res://bg/watet.gdshader" id="2_73v8a"]
 [ext_resource type="Shader" path="res://fog.gdshader" id="3_im3nu"]
+[ext_resource type="Texture2D" uid="uid://c5218yimuulon" path="res://bg/tesg_bg.png" id="4_6mvrs"]
+[ext_resource type="Shader" path="res://scroll.gdshader" id="4_nqiob"]
 
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_nowcn"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_m3kfx"]
+shader = ExtResource("2_73v8a")
+shader_parameter/transparency = 1.0
+shader_parameter/color0 = Color(0.656992, 0.207908, 0.00826578, 1)
+shader_parameter/color1 = Color(0.619034, 0.145165, 0.000831411, 1)
+shader_parameter/color2 = Color(0.629854, 0.152593, 1.92523e-07, 1)
+shader_parameter/color3 = Color(0.546829, 0.16741, 0.0141868, 1)
+shader_parameter/Direction = Vector2(0.04, 0.4)
+shader_parameter/Speed = 200.0
+shader_parameter/thresholds = PackedFloat32Array(0.6, 0.66, 0.75)
+shader_parameter/OCTAVE = 6
+shader_parameter/pixel_size = 184
+shader_parameter/dithering = 2.495
 
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_y6n51"]
-width = 128
-height = 128
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5yth4"]
+shader = ExtResource("4_nqiob")
+shader_parameter/speed = -0.1
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_akaqn"]
+frequency = 0.0086
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_ikbsq"]
+noise = SubResource("FastNoiseLite_akaqn")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_op4tq"]
+shader = ExtResource("3_im3nu")
+shader_parameter/color = Color(0.349065, 0.240872, 0.00705736, 1)
+shader_parameter/OCTAVES = 3
+shader_parameter/pixelation_amount = 70
+shader_parameter/fog_mask = SubResource("NoiseTexture2D_ikbsq")
+
+[sub_resource type="Gradient" id="Gradient_4xb16"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_hf0tm"]
+frequency = 0.0048
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_4sfyw"]
+width = 256
+height = 256
+generate_mipmaps = false
 seamless = true
-seamless_blend_skirt = 0.441
-noise = SubResource("FastNoiseLite_nowcn")
+seamless_blend_skirt = 0.188
+color_ramp = SubResource("Gradient_4xb16")
+noise = SubResource("FastNoiseLite_hf0tm")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_qlir2"]
 shader = ExtResource("3_im3nu")
-shader_parameter/octaves = 5
-shader_parameter/starting_amplitude = 0.5
-shader_parameter/starting_frequency = 1.0
-shader_parameter/shift = -0.29
-shader_parameter/velocity = Vector2(2, 1)
-shader_parameter/fog_color = Color(0, 0, 0, 1)
-shader_parameter/noise = SubResource("NoiseTexture2D_y6n51")
-
-[sub_resource type="Gradient" id="Gradient_m0nbe"]
-offsets = PackedFloat32Array(0.0974026, 0.422078)
-
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_obwbs"]
-
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_yd02c"]
-invert = true
-seamless = true
-seamless_blend_skirt = 0.348
-normalize = false
-color_ramp = SubResource("Gradient_m0nbe")
-noise = SubResource("FastNoiseLite_obwbs")
-
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_0b4lg"]
-
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_vgd6v"]
-width = 256
-height = 256
-seamless = true
-seamless_blend_skirt = 0.524
-noise = SubResource("FastNoiseLite_0b4lg")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_m3kfx"]
-shader = ExtResource("3_gw4n4")
-shader_parameter/iTime = null
-shader_parameter/lava_color = Color(0.908622, 0.353875, 0.141894, 1)
-shader_parameter/rock_color = Color(0, 0, 0, 1)
-shader_parameter/smoke_color = Color(0.205117, 0.205117, 0.205117, 0.5)
-shader_parameter/noise = SubResource("NoiseTexture2D_vgd6v")
+shader_parameter/color = Color(0.343712, 0.141864, 9.62615e-08, 1)
+shader_parameter/OCTAVES = 7
+shader_parameter/pixelation_amount = 70
+shader_parameter/fog_mask = SubResource("NoiseTexture2D_4sfyw")
 
 [node name="CanvasLayer" type="CanvasLayer"]
 script = ExtResource("1_lx3tm")
 
+[node name="Lava" type="ColorRect" parent="."]
+texture_repeat = 2
+material = SubResource("ShaderMaterial_m3kfx")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TextureRect" type="TextureRect" parent="."]
+texture_repeat = 2
+material = SubResource("ShaderMaterial_5yth4")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_6mvrs")
+
+[node name="fog2" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_op4tq")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
 [node name="Fog" type="ColorRect" parent="."]
+z_index = 1
 material = SubResource("ShaderMaterial_qlir2")
 anchors_preset = 15
 anchor_right = 1.0
@@ -64,20 +97,14 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="ParallaxBackground" type="ParallaxBackground" parent="."]
-scroll_offset = Vector2(15, 1250)
-
-[node name="background" type="Sprite2D" parent="ParallaxBackground"]
-visible = false
-z_index = -1
-scale = Vector2(1.259, 1)
-texture = SubResource("NoiseTexture2D_yd02c")
-centered = false
-
-[node name="Land" type="ColorRect" parent="."]
-material = SubResource("ShaderMaterial_m3kfx")
+[node name="Blacken" type="ColorRect" parent="."]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = -1.0
+offset_top = 3.00003
+offset_right = -1.0
+offset_bottom = 3.0
 grow_horizontal = 2
 grow_vertical = 2
+color = Color(0.431373, 0, 0, 0.0313726)

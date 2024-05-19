@@ -1,78 +1,67 @@
-[gd_scene load_steps=13 format=3 uid="uid://c1foykjrjascu"]
+[gd_scene load_steps=12 format=3 uid="uid://c1foykjrjascu"]
 
 [ext_resource type="Script" path="res://player_bullet.gd" id="1_b53o4"]
-[ext_resource type="Texture2D" uid="uid://dhfune16fwpdp" path="res://sprites/stolen_player_bullet.png" id="2_23m0q"]
+[ext_resource type="Texture2D" uid="uid://bc26jp7utrgdt" path="res://sprites/player_bullet_test.png" id="2_nyf7m"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_2a1bt"]
-size = Vector2(15, 10)
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ax7be"]
+radius = 12.0
+height = 31.0
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_c0ypo"]
-atlas = ExtResource("2_23m0q")
-region = Rect2(0, 0, 16, 12)
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_v1f02"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_p0ppk"]
-atlas = ExtResource("2_23m0q")
-region = Rect2(16, 0, 16, 12)
+[sub_resource type="AtlasTexture" id="AtlasTexture_x47hy"]
+atlas = ExtResource("2_nyf7m")
+region = Rect2(0, 0, 32, 32)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_yvl18"]
-atlas = ExtResource("2_23m0q")
-region = Rect2(32, 0, 16, 12)
+[sub_resource type="AtlasTexture" id="AtlasTexture_giy07"]
+atlas = ExtResource("2_nyf7m")
+region = Rect2(32, 0, 32, 32)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_fsibw"]
-atlas = ExtResource("2_23m0q")
-region = Rect2(48, 0, 16, 12)
+[sub_resource type="AtlasTexture" id="AtlasTexture_eq5nt"]
+atlas = ExtResource("2_nyf7m")
+region = Rect2(64, 0, 32, 32)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_m1eh3"]
-atlas = ExtResource("2_23m0q")
-region = Rect2(0, 0, 16, 12)
+[sub_resource type="AtlasTexture" id="AtlasTexture_atqre"]
+atlas = ExtResource("2_nyf7m")
+region = Rect2(96, 0, 32, 32)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_pdh28"]
-atlas = ExtResource("2_23m0q")
-region = Rect2(16, 0, 16, 12)
+[sub_resource type="AtlasTexture" id="AtlasTexture_ty2qj"]
+atlas = ExtResource("2_nyf7m")
+region = Rect2(0, 0, 32, 32)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_1yhgo"]
-atlas = ExtResource("2_23m0q")
-region = Rect2(32, 0, 16, 12)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_x3sbf"]
-atlas = ExtResource("2_23m0q")
-region = Rect2(16, 0, 16, 12)
+[sub_resource type="AtlasTexture" id="AtlasTexture_qade1"]
+atlas = ExtResource("2_nyf7m")
+region = Rect2(32, 0, 32, 32)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_h63tu"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_c0ypo")
+"texture": SubResource("AtlasTexture_x47hy")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_p0ppk")
+"texture": SubResource("AtlasTexture_giy07")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_yvl18")
+"texture": SubResource("AtlasTexture_eq5nt")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_fsibw")
+"texture": SubResource("AtlasTexture_atqre")
 }],
 "loop": false,
 "name": &"fade",
-"speed": 15.0
+"speed": 20.0
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_m1eh3")
+"texture": SubResource("AtlasTexture_ty2qj")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_pdh28")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_1yhgo")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_x3sbf")
+"texture": SubResource("AtlasTexture_qade1")
 }],
 "loop": true,
 "name": &"idle",
-"speed": 10.0
+"speed": 20.0
 }, {
 "frames": [],
 "loop": true,
@@ -87,12 +76,15 @@ script = ExtResource("1_b53o4")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0.5, 0)
-shape = SubResource("RectangleShape2D_2a1bt")
+rotation = 4.71239
+shape = SubResource("CapsuleShape2D_ax7be")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
-modulate = Color(1, 1, 1, 0.784314)
+modulate = Color(1, 1, 1, 0.796078)
+material = SubResource("ShaderMaterial_v1f02")
+rotation = 1.5708
 sprite_frames = SubResource("SpriteFrames_h63tu")
 animation = &"idle"
-frame_progress = 0.239299
+frame_progress = 0.980222
 
 [connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_fade"]
